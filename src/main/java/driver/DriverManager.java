@@ -14,7 +14,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -22,7 +21,7 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-public class Driver {
+public class DriverManager {
 
     public static final String REMOTE_WEBDRIVER_URL = "http://192.168.1.217:4444/wd/hub";
 
@@ -30,9 +29,9 @@ public class Driver {
     private static final int PAGE_TIME_OUT = 30;
     private static WebDriver driver;
 
-    private static final Logger log = LoggerFactory.getLogger(Driver.class);
+    private static final Logger log = LoggerFactory.getLogger(DriverManager.class);
 
-    private Driver() {
+    private DriverManager() {
     }
 
     private static WebDriver init() {

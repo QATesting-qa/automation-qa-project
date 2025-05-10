@@ -1,38 +1,35 @@
 package automation;
 
-import driver.Driver;
+import driver.DriverManager;
 import io.qameta.allure.Allure;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
-import pages.BasePage;
-import pages.LoginPage;
-import pages.RegisterPage;
-import pages.BasePageFactory;
-import pages.HomePage;
-
+import pages.*;
 import java.io.ByteArrayInputStream;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class BaseTest {
-    private static final Logger LOG = LogManager.getLogger(BaseTest.class);
+public abstract class BaseAppTest {
+    private static final Logger LOG = LogManager.getLogger(BaseAppTest.class);
 
-    protected HomePage homePage;
-    protected RegisterPage registerPage;
-    protected LoginPage loginPage;
 
-    protected WebDriver driver = Driver.getDriver();
+    protected LoginAppPage loginAppPage;
+    protected HomeAppPage homeAppPage;
+    protected AddToCartPage addToCartPage;
+    protected CartPage cartPage;
+
+    protected WebDriver driver = DriverManager.getDriver();
 
     public abstract void init();
 
-    protected <T extends BasePage> T createInstance(Class<T> page) {
-        return BasePageFactory.createInstance(driver, page);
+    protected <T extends BaseAppPage> T createInstance(Class<T> page) {
+        return BaseAppPageFactory.createInstance(driver, page);
     }
 
     @BeforeClass
@@ -40,9 +37,10 @@ public abstract class BaseTest {
         init();
 
         // instantiate POM pages
-        homePage = createInstance(HomePage.class);
-        registerPage = createInstance(RegisterPage.class);
-        loginPage = createInstance(LoginPage.class);
+        loginAppPage = createInstance(LoginAppPage.class);
+        homeAppPage = createInstance(HomeAppPage.class);
+        addToCartPage = createInstance(AddToCartPage.class);
+        cartPage = createInstance(CartPage.class);
     }
 
     @AfterMethod
@@ -52,12 +50,18 @@ public abstract class BaseTest {
         } else if (result.getStatus() == ITestResult.SKIP) {
             Allure.addAttachment("Step screenshot: ", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
         } else if (result.getStatus() == ITestResult.SUCCESS) {
-            // do nothing
+
         }
+    }
+
+    @AfterClass
+    public void quitDriver(){
+        driver.quit();
     }
 
     @AfterSuite
     public void tearDown() {
+
         driver.quit();
     }
 }

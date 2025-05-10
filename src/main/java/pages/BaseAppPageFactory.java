@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 /**
  * This class is used to instantiate page classes.
  */
-public class BasePageFactory {
-    private static final Logger log = LoggerFactory.getLogger(BasePageFactory.class);
+public class BaseAppPageFactory {
+    private static final Logger log = LoggerFactory.getLogger(BaseAppPageFactory.class);
 
-    public static <T extends BasePage> T createInstance(WebDriver driver, Class<T> page) {
+    public static <T extends BaseAppPage> T createInstance(WebDriver driver, Class<T> page) {
         try {
-            BasePage instance = page.getDeclaredConstructor().newInstance();
+            BaseAppPage instance = page.getDeclaredConstructor().newInstance();
             instance.init(driver);
 
             return page.cast(instance);
